@@ -30,10 +30,10 @@ public class WiimoteRotate : MonoBehaviour {
 				if (ret > 0 && wiimote.current_ext == ExtensionController.MOTIONPLUS) {
 					Vector3 offset = new Vector3 (-wiimote.MotionPlus.RollSpeed,
 						                wiimote.MotionPlus.YawSpeed,
-						                -wiimote.MotionPlus.PitchSpeed) / 95f; // Divide by 95Hz (average updates per second from wiimote)
+						                -wiimote.MotionPlus.PitchSpeed) / 100f; // Divide by 95Hz (average updates per second from wiimote)
 					//rotation += offset;
 					//Debug.Log ("MOTIONPLUS" + offset.ToString("F3"));
-					transform.Rotate (offset, Space.Self);
+					if(offset.magnitude > 0.05f) transform.Rotate (offset, Space.Self);
 					if (Input.GetKeyDown(KeyCode.C)) {
 						Debug.Log ("Callibrate");
 						CallibrateWiimote ();
