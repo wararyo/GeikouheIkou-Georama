@@ -34,7 +34,7 @@ public class WiimoteRotate : MonoBehaviour {
 						                wiimote.MotionPlus.RollSpeed) / 95f; // Divide by 95Hz (average updates per second from wiimote)
 					//rotation += offset;
 					//Debug.Log ("MOTIONPLUS" + offset.ToString("F3"));
-					transform.Rotate (offset, Space.World);
+					transform.Rotate (offset, Space.Self);
 					if (wiimote.Button.home) {
 						Debug.Log ("Home Pressed");
 						CallibrateWiimote ();
