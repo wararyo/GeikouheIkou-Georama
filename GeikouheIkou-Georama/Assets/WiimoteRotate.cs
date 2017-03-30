@@ -14,8 +14,8 @@ public class WiimoteRotate : MonoBehaviour {
 			WiimoteManager.FindWiimotes ();
 			wiimote = WiimoteManager.Wiimotes [0];
 			wiimote.RequestIdentifyWiiMotionPlus ();
-			if(wiimote.ActivateWiiMotionPlus ()) Debug.Log("WiiMotionPlus Activated");
 			wiimote.SendDataReportMode (InputDataType.REPORT_BUTTONS_EXT19);
+			if(wiimote.ActivateWiiMotionPlus ()) Debug.Log("WiiMotionPlus Activated");
 			wiimote.SendPlayerLED (true, false, false, false);
 			CallibrateWiimote ();
 		}
@@ -49,5 +49,12 @@ public class WiimoteRotate : MonoBehaviour {
 	IEnumerator CallibrateWiimote_raw(){
 		yield return new WaitForSeconds (3f);
 		wiimote.MotionPlus.SetZeroValues ();
+	}
+
+	void UpdateBatteryStatus(){
+		wiimote.SendStatusInfoRequest ();
+		Debug.Log ("Battery : " + (wiimote.Status.battery_level / 2.56) + "%");
+		if (wiimote.Status.battery_low)
+			wiimote.SendPlayerLED (true, true, true, true);
 	}
 }
