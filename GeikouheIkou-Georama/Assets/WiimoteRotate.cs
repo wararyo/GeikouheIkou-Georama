@@ -14,10 +14,9 @@ public class WiimoteRotate : MonoBehaviour {
 			WiimoteManager.FindWiimotes ();
 			wiimote = WiimoteManager.Wiimotes [0];
 			wiimote.RequestIdentifyWiiMotionPlus ();
-			wiimote.SendDataReportMode (InputDataType.REPORT_BUTTONS_EXT19);
+			wiimote.SendDataReportMode (InputDataType.REPORT_EXT21);
 			if(wiimote.ActivateWiiMotionPlus ()) Debug.Log("WiiMotionPlus Activated");
 			wiimote.SendPlayerLED (true, false, false, false);
-			CallibrateWiimote ();
 		}
 	}
 	
@@ -29,15 +28,19 @@ public class WiimoteRotate : MonoBehaviour {
 			do {
 				ret = wiimote.ReadWiimoteData ();
 				if (ret > 0 && wiimote.current_ext == ExtensionController.MOTIONPLUS) {
-					Vector3 offset = new Vector3 (wiimote.MotionPlus.PitchSpeed,
-						                -wiimote.MotionPlus.YawSpeed,
-						                wiimote.MotionPlus.RollSpeed) / 95f; // Divide by 95Hz (average updates per second from wiimote)
+					Vector3 offset = new Vector3 (-wiimote.MotionPlus.RollSpeed,
+						                wiimote.MotionPlus.YawSpeed,
+						                -wiimote.MotionPlus.PitchSpeed) / 95f; // Divide by 95Hz (average updates per second from wiimote)
 					//rotation += offset;
 					//Debug.Log ("MOTIONPLUS" + offset.ToString("F3"));
 					transform.Rotate (offset, Space.Self);
-					if (wiimote.Button.home) {
-						Debug.Log ("Home Pressed");
+					if (Input.GetKeyDown(KeyCode.C)) {
+						Debug.Log ("Callibrate");
 						CallibrateWiimote ();
+						transform.rotation = new Quaternion(0,0,0,0);
+					}
+					else if(Input.GetKeyDown(KeyCode.B)){
+						UpdateBatteryStatus();
 					}
 				}
 			} while(ret > 0);
@@ -45,11 +48,6 @@ public class WiimoteRotate : MonoBehaviour {
 	}
 
 	void CallibrateWiimote(){
-		StartCoroutine (CallibrateWiimote_raw ());
-	}
-
-	IEnumerator CallibrateWiimote_raw(){
-		yield return new WaitForSeconds (3f);
 		wiimote.MotionPlus.SetZeroValues ();
 	}
 
