@@ -59,7 +59,7 @@ public class TimeCounter : CueEventBase {
 	}
 
 	public void Update(){
-		if (RemainTime <= 0) {
+		if (isCounting && RemainTime <= 0) {
 			isCounting = false;
 			OnTime ();
 		}
