@@ -51,7 +51,7 @@ public class WiimoteRotate : MonoBehaviour {
 		wiimote.MotionPlus.SetZeroValues ();
 	}
 
-	void UpdateBatteryStatus(){
+	public void UpdateBatteryStatus(){
 		wiimote.SendStatusInfoRequest ();
 		Debug.Log ("Battery : " + (wiimote.Status.battery_level / 2.56) + "%");
 		if (wiimote.Status.battery_low)

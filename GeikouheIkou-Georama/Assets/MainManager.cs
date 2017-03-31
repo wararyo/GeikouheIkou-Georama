@@ -8,6 +8,7 @@ public class MainManager : MonoBehaviour {
 	public CueScenePlayer cueScenePlayer;
 	public TimeCounter timeCounter;
 	public Text remainTimeText;
+	public WiimoteRotate wiimoterotate;
 
 	public CueScene cueSceneStart;
 	public CueScene cueSceneTimeUp; 
@@ -29,7 +30,7 @@ public class MainManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown ("Fire1")) {
+		if (Input.GetButtonDown ("Fire1") || Input.GetKeyDown(KeyCode.Return)) {
 			switch (gameState) {
 			case GameState.Title:
 				cueScenePlayer.Play (cueSceneStart);
@@ -41,6 +42,7 @@ public class MainManager : MonoBehaviour {
 			case GameState.Result:
 				cueScenePlayer.Play (cueSceneEnd);
 				gameState = GameState.Title;
+				wiimoterotate.UpdateBatteryStatus ();
 				break;
 			}
 		}
